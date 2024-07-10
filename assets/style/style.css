@@ -1,0 +1,56 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+
+* {
+    --quizell-primary: #4D1B7E;
+}
+
+.button-clr {
+    background-color: var(--quizell-primary);
+    color: #fff;
+}
+
+.button-clr:hover {
+    color: #fff;
+}
+
+.text-clr {
+    color: var(--quizell-primary);
+}
+
+.text-clr:hover {
+    color: var(--quizell-primary);
+}
+
+.img-size {
+    width: 180px;
+    height: 40px;
+}
+
+.font-size {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.input-form-control {
+    outline: none;
+    border: none;
+    width: 100%;
+}
+
+.custom-input {
+    border: 1px solid #dedede;
+    border-radius: 12px;
+    box-sizing: border-box;
+    background: #fff;
+    display: flex;
+    padding: 8px 22px;
+    align-items: center;
+    gap: 10px;
+}
+.width{
+    width: 70%;
+}
