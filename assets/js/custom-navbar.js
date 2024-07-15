@@ -1,14 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+function CustomNavbar() {
+    const element = Reflect.construct(HTMLElement, [], CustomNavbar);
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quizell Web page</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    const shadow = element.attachShadow({ mode: 'open' });
+    shadow.innerHTML = `
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
+          <style>
         
         * {
             margin: 0;
@@ -108,10 +106,7 @@
             }
         }
     </style>
-</head>
-
-<body>
-    <div class="container-fluid">
+          <div class="container-fluid">
         <!-- Navbar Started -->
         <nav class="navbar">
             <div class="navbar-logo">
@@ -148,6 +143,14 @@
          
           
     </div>
-</body>
+    `;
 
-</html>
+    return element;
+}
+
+// Set up the prototype chain
+CustomNavbar.prototype = Object.create(HTMLElement.prototype);
+CustomNavbar.prototype.constructor = CustomNavbar;
+
+// Define the custom element
+customElements.define('custom-navbar', CustomNavbar);
