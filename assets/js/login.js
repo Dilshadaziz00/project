@@ -23,39 +23,31 @@ function togglePassword(inputElement) {
 // })
 
 
+window.onload = function () {
+    if (localStorage.getItem('token')) {
+        // window.location.href = 'login.html';
+        window.location.href = 'index.html';
+    }
+  
+    
+}
 
-
-
+let responseData;
 
 
 async function loginApiCall(email, password) {
     let userLoginData = { email: email, password: password };
-    // let userLoginData = { email: "alikhan@gmail.com", password: "11223344" };
 
+ 
     try {
         const response = await fetchCall('api/login', 'post', userLoginData);
         console.log("response", response);
-        console.log("response", response.token);
-
-        if (response &&  response.token) {
-            localStorage.setItem('token', response.token);
-            console.log('Login successful. Token stored:', response.token);
-            window.location.href = 'index.html'; 
-        } else {
-           
-            displayError(response)
-            console.log("response", response);
-           
-            console.error('Login failed. No token received.');
-        }
+        responseData = response;
     } catch (error) {
-        displayError({ email: ['Network error. Please try again.'] }); 
+        displayError({ email: ['Network error. Please try again.'] });
         console.error('Error during login:', error);
     }
-};
-
-
-
+}
 
 async function fetchCall(url = '', method = 'post', payload = null) {
     const requestOptions = {
@@ -71,6 +63,7 @@ async function fetchCall(url = '', method = 'post', payload = null) {
 
     try {
         const response = await fetch('http://127.0.0.1:8000/' + url, requestOptions);
+      
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -81,36 +74,48 @@ async function fetchCall(url = '', method = 'post', payload = null) {
     }
 }
 
-function displayError(response) {
-    let emptyDiv = document.querySelector('.invalid-div');
-    emptyDiv.innerHTML = ''; 
-        response.email.forEach(errorMsg => {
-            let errorMessage = document.createElement('span');
-            errorMessage.textContent = errorMsg;
-            emptyDiv.appendChild(errorMessage);
-               errorMessage.textContent = 'Invalid email or password.';
-        emptyDiv.appendChild(errorMessage);
-        });
-   
-};
-
-const loginUser = (e) => {
+const loginUser = async (e) => {
     e.preventDefault();
     let email = document.querySelector('.input-email').value;
     let password = document.querySelector('.input-password').value;
-    loginApiCall(email, password);
+
+    await loginApiCall(email, password);
+
+    if (responseData && responseData.token) {
+
+
+        localStorage.setItem('token', responseData.token);
+        console.log('Login successful. Token stored:', responseData.token);
+        window.location.href = 'index.html';
+    } else {
+        displayError(responseData);
+        console.log("response", responseData);
+        console.error('Login failed. No token received.');
+    }
 };
 
 document.querySelector('.login-form').addEventListener('submit', loginUser);
 
+function displayError(responseData) {
+    let emptyDiv = document.querySelector('.invalid-div');
+    emptyDiv.innerHTML = '';
+    
+    if (responseData && responseData.email) {
+        responseData.email.forEach(errorMsg => {
+            let errorMessage = document.createElement('span');
+            errorMessage.textContent = errorMsg;
+            emptyDiv.appendChild(errorMessage);
+        });
+    } else {
+        let errorMessage = document.createElement('span');
+        errorMessage.textContent = 'Invalid email or password.';
+        emptyDiv.appendChild(errorMessage);
+    }
+}
 
 
 
-
-
-
-
-
+loginUser()
 
 
 
